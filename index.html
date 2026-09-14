@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>901|Wysiz TG Checker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #0a0a0a;
+            color: #00ff41;
+            font-family: 'Courier New', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 700px;
+            width: 100%;
+            background: #111;
+            border: 1px solid #00ff41;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
+        }
+        .logo {
+            font-size: 48px;
+            font-weight: bold;
+            text-align: center;
+            text-shadow: 0 0 20px #00ff41;
+            margin-bottom: 10px;
+            animation: glow 2s infinite alternate;
+        }
+        @keyframes glow {
+            from { text-shadow: 0 0 10px #00ff41, 0 0 20px #00ff41; }
+            to { text-shadow: 0 0 20px #00ff41, 0 0 40px #00ff41, 0 0 60px #00ff41; }
+        }
+        .subtitle {
+            text-align: center;
+            color: #00cc33;
+            font-size: 16px;
+            margin-bottom: 30px;
+            opacity: 0.8;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #00cc33;
+            font-size: 14px;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            background: #0a0a0a;
+            border: 1px solid #00ff41;
+            color: #00ff41;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            border-radius: 5px;
+            outline: none;
+        }
+        input:focus, select:focus {
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.5);
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            background: #00ff41;
+            color: #0a0a0a;
+            border: none;
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #00cc33;
+            box-shadow: 0 0 20px #00ff41;
+        }
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background: #0a0a0a;
+            border: 1px solid #00ff41;
+            border-radius: 5px;
+            display: none;
+        }
+        .result.show {
+            display: block;
+        }
+        .result h3 {
+            color: #00ff41;
+            margin-bottom: 15px;
+        }
+        .result p {
+            color: #00cc33;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 12px;
+            color: #00cc33;
+            opacity: 0.5;
+        }
+        .warning {
+            background: #1a0000;
+            border: 1px solid #ff0000;
+            color: #ff4444;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">901|Wysiz</div>
+        <div class="subtitle">TG Checker - Telegram Bilgi Sorgulama</div>
+
+        <div class="warning">
+            ⚠️ Bu araç yalnızca eğitim amaçlıdır. Başkalarının verilerini izinsiz toplamak yasaktır.
+        </div>
+
+        <div class="form-group">
+            <label for="queryType">Sorgu Türü:</label>
+            <select id="queryType">
+                <option value="username">Kullanıcı Adı</option>
+                <option value="phone">Telefon Numarası</option>
+                <option value="id">Kullanıcı ID</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="queryValue">Değer:</label>
+            <input type="text" id="queryValue" placeholder="@kullaniciadi veya +905551112233">
+        </div>
+
+        <button onclick="sorgula()">Sorgula</button>
+
+        <div class="result" id="result">
+            <h3>📊 Sorgu Sonucu</h3>
+            <p><strong>Durum:</strong> <span id="resStatus">-</span></p>
+            <p><strong>Kullanıcı Adı:</strong> <span id="resUsername">-</span></p>
+            <p><strong>İsim:</strong> <span id="resName">-</span></p>
+            <p><strong>Bio:</strong> <span id="resBio">-</span></p>
+            <p><strong>Kullanıcı ID:</strong> <span id="resId">-</span></p>
+            <p><strong>Hesap Yaşı:</strong> <span id="resAge">-</span></p>
+        </div>
+
+        <div class="footer">
+            901|Wysiz tarafından geliştirilmiştir.
+        </div>
+    </div>
+
+    <script>
+        function sorgula() {
+            const queryType = document.getElementById('queryType').value;
+            const queryValue = document.getElementById('queryValue').value.trim();
+            const resultDiv = document.getElementById('result');
+
+            if (!queryValue) {
+                alert('Lütfen bir değer girin!');
+                return;
+            }
+
+            // Sonuçları göster (simülasyon)
+            document.getElementById('resStatus').textContent = 'Sorgulandı (Demo)';
+            document.getElementById('resUsername').textContent = queryValue;
+            document.getElementById('resName').textContent = 'Bu bir demo sonucudur';
+            document.getElementById('resBio').textContent = 'Gerçek sorgulama için Telegram API gerekir';
+            document.getElementById('resId').textContent = '123456789';
+            document.getElementById('resAge').textContent = '2 yıl';
+
+            resultDiv.classList.add('show');
+        }
+    </script>
+</body>
+  </html>
